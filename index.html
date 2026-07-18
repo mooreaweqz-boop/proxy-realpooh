@@ -47,7 +47,6 @@
             width: 100%;
             max-width: 480px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.03);
-            transform: translateY(0);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -95,6 +94,12 @@
         }
 
         /* ส่วนกรอกคีย์ */
+        .action-zone {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .input-wrapper {
             position: relative;
             margin-bottom: 20px;
@@ -123,13 +128,10 @@
             color: #555555;
         }
 
-        /* ปุ่มกดยืนยันสุดเฟี้ยว */
-        button {
+        /* ปุ่มกดทั่วไป */
+        .btn {
             width: 100%;
             padding: 16px;
-            background: #ffffff;
-            color: #000000;
-            border: none;
             border-radius: 14px;
             font-size: 1.05rem;
             font-weight: 700;
@@ -138,21 +140,27 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #000000;
+            border: none;
             box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
         }
 
-        button:hover {
+        .btn-primary:hover {
             background: #f0f0f0;
             transform: translateY(-2px);
             box-shadow: 0 12px 28px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
-
-        /* เอฟเฟกต์แสงวิ่งผ่านปุ่ม (Glow Flash) */
-        button::after {
+        /* เอฟเฟกต์แสงวิ่งผ่านปุ่มพรีเมียม */
+        .btn-primary::after {
             content: '';
             position: absolute;
             top: 0;
@@ -161,7 +169,6 @@
             height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
             transform: skewX(-25deg);
-            transition: 0.75s;
             animation: shine 3s infinite linear;
         }
 
@@ -170,7 +177,34 @@
             100% { left: 150%; }
         }
 
-        /* ระบบแจ้งเตือนลอยได้ (Toast Notification) */
+        /* โซนปุ่มลับหลังจากคีย์ผ่าน */
+        .download-zone {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            flex-direction: column;
+            gap: 14px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.05);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* ระบบแจ้งเตือนลอยได้ (Toast) */
         .toast {
             position: fixed;
             bottom: -80px;
@@ -186,9 +220,6 @@
             transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 999;
             pointer-events: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .toast.show {
@@ -198,7 +229,6 @@
 </head>
 <body>
 
-    <!-- พื้นหลังคลื่นไฟฟ้าเคลื่อนไหว -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="glass-container">
@@ -210,17 +240,29 @@
             <li>4. เปิดเกมเล่นได้เลย!!</li>
         </ul>
 
-        <div class="input-wrapper">
-            <input type="text" id="user-key" placeholder="ENTER YOUR ACCESS KEY..." autocomplete="off">
+        <!-- โซนที่ 1: กรอกคีย์เริ่มต้น -->
+        <div id="key-zone" class="action-zone">
+            <div class="input-wrapper">
+                <input type="text" id="user-key" placeholder="ENTER YOUR ACCESS KEY..." autocomplete="off">
+            </div>
+            <button class="btn btn-primary" onclick="verifyKey()">ยืนยันคีย์</button>
         </div>
-        <button onclick="verifyKey()">ยืนยันคีย์</button>
+
+        <!-- โซนที่ 2: ปุ่มลับที่จะขึ้นมาเมื่อคีย์ถูกต้อง -->
+        <div id="download-zone" class="download-zone">
+            <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn btn-primary">📥 ดาวน์โหลด Potatso</a>
+            <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn btn-secondary">📜 ดาวน์โหลดใบรับรอง</a>
+            <!-- อัปเดตลิงก์คลิปสอนให้เรียบร้อยแล้วครับ -->
+            <a href="https://youtu.be/XcXYzDPB1-k?si=ZWmi643iFjlAhogY" target="_blank" class="btn btn-secondary">🎥 คลิปสอนการใช้งาน</a>
+        </div>
     </div>
 
-    <!-- กล่องแจ้งเตือน -->
     <div id="toast-msg" class="toast"></div>
 
     <script>
-        // --- ระบบแจ้งเตือนแบบสมูธ (Toast) ---
+        // กำหนดคีย์ที่ถูกต้องตรงนี้ (เปลี่ยนเป็นคำที่ต้องการได้เลยครับ)
+        const CORRECT_KEY = "REALPOOH123"; 
+
         function showToast(message) {
             const toast = document.getElementById('toast-msg');
             toast.innerText = message;
@@ -232,17 +274,39 @@
 
         function verifyKey() {
             const keyInput = document.getElementById('user-key').value.trim();
+            
             if (keyInput === "") {
                 showToast("❌ กรุณากรอก Key ของคุณก่อนกดยืนยัน!");
                 return;
             }
-            showToast("⚡ กำลังตรวจสอบสิทธิ์คีย์ของคุณ...");
+
+            if (keyInput === CORRECT_KEY) {
+                showToast("✅ คีย์ถูกต้อง!");
+                
+                const keyZone = document.getElementById('key-zone');
+                const downloadZone = document.getElementById('download-zone');
+                
+                keyZone.style.opacity = "0";
+                keyZone.style.transform = "translateY(-10px)";
+                
+                setTimeout(() => {
+                    keyZone.style.display = "none";
+                    downloadZone.style.display = "flex";
+                    
+                    downloadZone.offsetHeight; 
+                    
+                    downloadZone.style.opacity = "1";
+                    downloadZone.style.transform = "translateY(0)";
+                }, 400); 
+                
+            } else {
+                showToast("❌ คีย์ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง!");
+            }
         }
 
-        // --- ระบบสร้างคลื่นไฟฟ้าฉากหลัง (Canvas Animation) ---
+        // --- ฉากหลังไฟฟ้าเคลื่อนไหว (สมูธแอนิเมชัน) ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
@@ -252,9 +316,7 @@
         });
 
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
@@ -268,10 +330,7 @@
                 this.x += this.speedX;
                 this.y += this.speedY;
                 this.alpha -= this.fadeRate;
-
-                if (this.alpha <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-                    this.reset();
-                }
+                if (this.alpha <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) this.reset();
             }
             draw() {
                 ctx.save();
@@ -287,23 +346,17 @@
         }
 
         const particles = [];
-        const particleCount = 45; 
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < 45; i++) particles.push(new Particle());
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            
-            // วาดเส้นโยงกระแสไฟฟ้าแบบบางเบาและสมูธ
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
             ctx.lineWidth = 0.5;
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 180) {
+                    if (Math.sqrt(dx * dx + dy * dy) < 180) {
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -311,12 +364,7 @@
                     }
                 }
             }
-
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
         animate();
