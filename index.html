@@ -33,7 +33,7 @@
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-    <div class="glass-container" id="main-box">
+    <div class="glass-container">
         <div id="instruction-zone">
             <h2>⚡ วิธีใช้งาน</h2>
             <ul class="instruction-list">
@@ -76,10 +76,8 @@
         
         function verifyKey() {
             if (document.getElementById('user-key').value === "REALPOOH123") {
-                // ลบส่วนแนะนำการใช้งานออก
                 document.getElementById('instruction-zone').style.display = 'none';
                 document.getElementById('key-zone').style.display = 'none';
-                // แสดงผลปุ่มและ proxy
                 document.getElementById('download-zone').style.display = 'flex';
                 showToast("ถูกต้อง!");
             } else {
