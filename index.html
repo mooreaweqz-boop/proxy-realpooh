@@ -1,28 +1,66 @@
-<script>
-    // URL ของไฟล์ที่มีรายชื่อคีย์ (คุณต้องไปสร้างไฟล์ txt หรือ json ไว้ที่เว็บนั้น)
-    const KEY_SOURCE_URL = "https://mooreaweqz-boop.github.io/key-proxy-roblox/keys.txt"; 
-
-    async function verifyKey() {
-        const inputKey = document.getElementById('user-key').value.trim();
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Control</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: #050505; color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .glass-container { background: rgba(20, 20, 20, 0.9); border: 1px solid #333; padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; }
         
-        try {
-            const response = await fetch(KEY_SOURCE_URL);
-            const text = await response.text();
+        input { width: 100%; padding: 15px; margin-bottom: 15px; background: #111; border: 1px solid #444; color: white; border-radius: 10px; outline: none; }
+        button { width: 100%; padding: 15px; background: white; color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        
+        .download-zone { display: none; margin-top: 20px; }
+        .btn-link { display: block; width: 100%; padding: 12px; margin-top: 10px; background: #222; color: white; text-decoration: none; border-radius: 10px; }
+        
+        .proxy-box { margin-top: 20px; padding: 15px; background: #1a1a1a; border-radius: 10px; text-align: left; }
+        .toast { position: fixed; bottom: 20px; padding: 10px 20px; background: #333; border-radius: 20px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container">
+        <div id="key-zone">
+            <h2>LOGIN KEY</h2>
+            <input type="text" id="user-key" placeholder="ENTER KEY...">
+            <button onclick="verifyKey()">ยืนยัน</button>
+        </div>
+
+        <div id="download-zone" class="download-zone">
+            <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn-link">📥 Potatso</a>
+            <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn-link">📜 ใบรับรอง</a>
             
-            // ตรวจสอบว่าคีย์ที่กรอกอยู่ในไฟล์นั้นไหม
-            if (text.includes(inputKey) && inputKey !== "") {
-                document.getElementById('instruction-zone').style.display = 'none';
-                document.getElementById('key-zone').style.display = 'none';
-                document.getElementById('download-zone').style.display = 'flex';
-                showToast("✅ คีย์ถูกต้อง!");
-            } else {
-                showToast("❌ คีย์ไม่ถูกต้อง หรือไม่มีในระบบ");
+            <div class="proxy-box">
+                <p>เซิร์ฟ: <span id="s">147.50.235.235</span></p>
+                <p>พอร์ต: <span id="p">9998</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        async function verifyKey() {
+            const key = document.getElementById('user-key').value.trim();
+            const toast = document.getElementById('toast');
+            
+            try {
+                // เปลี่ยนลิงก์ให้เป็นลิงก์ที่ไฟล์ keys.txt ของคุณอยู่จริงๆ
+                const res = await fetch("https://mooreaweqz-boop.github.io/key-proxy-roblox/keys.txt");
+                const data = await res.text();
+                
+                if (data.includes(key) && key !== "") {
+                    document.getElementById('key-zone').style.display = 'none';
+                    document.getElementById('download-zone').style.display = 'block';
+                } else {
+                    alert("คีย์ไม่ถูกต้อง");
+                }
+            } catch (e) {
+                alert("ไม่สามารถเชื่อมต่อระบบคีย์ได้");
             }
-        } catch (err) {
-            showToast("⚠️ ไม่สามารถตรวจสอบคีย์ได้ในขณะนี้");
         }
-    }
-    
-    // ฟังก์ชันเดิมที่มีอยู่แล้ว
-    function showToast(msg) { const t = document.getElementById('toast-msg'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
-</script>
+    </script>
+</body>
+</html>
