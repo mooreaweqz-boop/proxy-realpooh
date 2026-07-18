@@ -1,89 +1,28 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proxy Control</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #050505; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 40px 20px; }
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        
-        .glass-container { position: relative; z-index: 2; background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 35px; border-radius: 24px; width: 100%; max-width: 480px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); }
-        
-        h2 { color: #ffffff; font-size: 1.4rem; margin-bottom: 20px; text-transform: uppercase; }
-        .instruction-list { list-style: none; margin-bottom: 25px; }
-        .instruction-list li { color: #b3b3b3; font-size: 1.05rem; margin-bottom: 12px; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border-left: 3px solid rgba(255, 255, 255, 0.3); border-radius: 0 12px 12px 0; }
-        
-        .proxy-info-box { display: none; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; margin-top: 20px; }
-        .proxy-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .proxy-label { color: #a3a3a3; font-size: 0.95rem; }
-        .proxy-value { color: #ffffff; font-weight: 600; font-family: monospace; }
-        .btn-copy { background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); padding: 6px 14px; border-radius: 8px; cursor: pointer; margin-left: 15px; }
-        
-        input[type="text"] { width: 100%; padding: 16px 20px; background: rgba(0, 0, 0, 0.4); border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 14px; color: #ffffff; margin-bottom: 20px; outline: none; }
-        .btn { width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; border: none; text-align: center; text-decoration: none; display: block; margin-bottom: 14px; }
-        .btn-primary { background: #ffffff; color: #000000; }
-        .btn-secondary { background: rgba(255, 255, 255, 0.05); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); }
-        
-        .download-zone { display: none; flex-direction: column; }
-        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); color: #000000; padding: 14px 28px; border-radius: 50px; font-weight: 600; opacity: 0; transition: opacity 0.3s; z-index: 999; pointer-events: none; }
-        .toast.show { opacity: 1; }
-    </style>
-</head>
-<body>
-    <canvas id="bg-canvas"></canvas>
-    <div class="glass-container">
-        <div id="instruction-zone">
-            <h2>⚡ วิธีใช้งาน</h2>
-            <ul class="instruction-list">
-                <li>1. กรอก Key ของคุณ</li>
-                <li>2. ดาวน์โหลด potatso บนไอโฟนของคุณ</li>
-                <li>3. ตั้งค่า proxy บนแอป</li>
-                <li>4. เปิดเกมเล่นได้เลย!!</li>
-            </ul>
-        </div>
+<script>
+    // URL ของไฟล์ที่มีรายชื่อคีย์ (คุณต้องไปสร้างไฟล์ txt หรือ json ไว้ที่เว็บนั้น)
+    const KEY_SOURCE_URL = "https://mooreaweqz-boop.github.io/key-proxy-roblox/keys.txt"; 
 
-        <div id="key-zone">
-            <input type="text" id="user-key" placeholder="ENTER YOUR ACCESS KEY...">
-            <button class="btn btn-primary" onclick="verifyKey()">ยืนยันคีย์</button>
-        </div>
-
-        <div id="download-zone" class="download-zone">
-            <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn btn-primary">📥 ดาวน์โหลด Potatso</a>
-            <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn btn-secondary">📜 ดาวน์โหลดใบรับรอง</a>
-            <a href="https://youtu.be/XcXYzDPB1-k?si=ZWmi643iFjlAhogY" target="_blank" class="btn btn-secondary">🎥 คลิปสอนการใช้งาน</a>
+    async function verifyKey() {
+        const inputKey = document.getElementById('user-key').value.trim();
+        
+        try {
+            const response = await fetch(KEY_SOURCE_URL);
+            const text = await response.text();
             
-            <div id="proxy-box" class="proxy-info-box" style="display: block;">
-                <h2>🎯 ยิงตัวโดนหัว</h2>
-                <div class="proxy-item">
-                    <span class="proxy-label">เซิร์ฟ:</span>
-                    <div><span class="proxy-value" id="server-val">147.50.235.235</span><button class="btn-copy" onclick="copyText('server-val')">ก๊อป</button></div>
-                </div>
-                <div class="proxy-item">
-                    <span class="proxy-label">พอร์ต:</span>
-                    <div><span class="proxy-value" id="port-val">9998</span><button class="btn-copy" onclick="copyText('port-val')">ก๊อป</button></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="toast-msg" class="toast"></div>
-
-    <script>
-        function showToast(msg) { const t = document.getElementById('toast-msg'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
-        function copyText(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); showToast("คัดลอกสำเร็จ!"); }
-        
-        function verifyKey() {
-            if (document.getElementById('user-key').value === "REALPOOH123") {
+            // ตรวจสอบว่าคีย์ที่กรอกอยู่ในไฟล์นั้นไหม
+            if (text.includes(inputKey) && inputKey !== "") {
                 document.getElementById('instruction-zone').style.display = 'none';
                 document.getElementById('key-zone').style.display = 'none';
                 document.getElementById('download-zone').style.display = 'flex';
-                showToast("ถูกต้อง!");
+                showToast("✅ คีย์ถูกต้อง!");
             } else {
-                showToast("คีย์ไม่ถูกต้อง");
+                showToast("❌ คีย์ไม่ถูกต้อง หรือไม่มีในระบบ");
             }
+        } catch (err) {
+            showToast("⚠️ ไม่สามารถตรวจสอบคีย์ได้ในขณะนี้");
         }
-    </script>
-</body>
-</html>
+    }
+    
+    // ฟังก์ชันเดิมที่มีอยู่แล้ว
+    function showToast(msg) { const t = document.getElementById('toast-msg'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+</script>
