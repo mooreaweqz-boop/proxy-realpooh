@@ -57,9 +57,9 @@
 
         h2 {
             color: #ffffff;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
             display: flex;
@@ -71,13 +71,13 @@
         /* รายการวิธีใช้งาน */
         .instruction-list {
             list-style: none;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
         }
 
         .instruction-list li {
             color: #b3b3b3;
             font-size: 1.05rem;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             padding: 14px 18px;
             background: rgba(255, 255, 255, 0.03);
             border-left: 3px solid rgba(255, 255, 255, 0.3);
@@ -91,6 +91,66 @@
             border-left-color: #ffffff;
             transform: translateX(6px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2), 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        /* กล่องข้อมูลยิงตัวโดนหัว */
+        .proxy-info-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .proxy-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .proxy-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .proxy-item:first-child {
+            padding-top: 0;
+        }
+
+        .proxy-label {
+            color: #a3a3a3;
+            font-size: 0.95rem;
+        }
+
+        .proxy-value {
+            color: #ffffff;
+            font-weight: 600;
+            font-family: monospace;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ปุ่มคัดลอกแบบมินิมอล */
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-left: 15px;
+        }
+
+        .btn-copy:hover {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
         /* ส่วนกรอกคีย์ */
@@ -240,6 +300,25 @@
             <li>4. เปิดเกมเล่นได้เลย!!</li>
         </ul>
 
+        <!-- โซนยิงตัวโดนหัว: อัปเดตไอพีเป็น 147.50.253.253 เรียบร้อยแล้วครับ -->
+        <div class="proxy-info-box">
+            <h2>🎯 ยิงตัวโดนหัว</h2>
+            <div class="proxy-item">
+                <span class="proxy-label">เซิร์ฟ:</span>
+                <div>
+                    <span class="proxy-value" id="server-val">147.50.253.253</span>
+                    <button class="btn-copy" onclick="copyText('server-val', 'เซิร์ฟเวอร์')">คัดลอก</button>
+                </div>
+            </div>
+            <div class="proxy-item">
+                <span class="proxy-label">พอร์ต:</span>
+                <div>
+                    <span class="proxy-value" id="port-val">9998</span>
+                    <button class="btn-copy" onclick="copyText('port-val', 'พอร์ต')">คัดลอก</button>
+                </div>
+            </div>
+        </div>
+
         <!-- โซนที่ 1: กรอกคีย์เริ่มต้น -->
         <div id="key-zone" class="action-zone">
             <div class="input-wrapper">
@@ -252,7 +331,6 @@
         <div id="download-zone" class="download-zone">
             <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn btn-primary">📥 ดาวน์โหลด Potatso</a>
             <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn btn-secondary">📜 ดาวน์โหลดใบรับรอง</a>
-            <!-- อัปเดตลิงก์คลิปสอนให้เรียบร้อยแล้วครับ -->
             <a href="https://youtu.be/XcXYzDPB1-k?si=ZWmi643iFjlAhogY" target="_blank" class="btn btn-secondary">🎥 คลิปสอนการใช้งาน</a>
         </div>
     </div>
@@ -260,7 +338,6 @@
     <div id="toast-msg" class="toast"></div>
 
     <script>
-        // กำหนดคีย์ที่ถูกต้องตรงนี้ (เปลี่ยนเป็นคำที่ต้องการได้เลยครับ)
         const CORRECT_KEY = "REALPOOH123"; 
 
         function showToast(message) {
@@ -270,6 +347,16 @@
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
+        }
+
+        // ระบบคัดลอกข้อความ
+        function copyText(elementId, label) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast(`📋 คัดลอก ${label} เรียบร้อยแล้ว!`);
+            }).catch(err => {
+                showToast("❌ ไม่สามารถคัดลอกได้อัตโนมัติ");
+            });
         }
 
         function verifyKey() {
