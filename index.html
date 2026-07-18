@@ -1,64 +1,48 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proxy Control</title>
+    <title>Key Login</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #050505; color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .glass-container { background: rgba(20, 20, 20, 0.9); border: 1px solid #333; padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; text-align: center; }
-        
-        input { width: 100%; padding: 15px; margin-bottom: 15px; background: #111; border: 1px solid #444; color: white; border-radius: 10px; outline: none; }
-        button { width: 100%; padding: 15px; background: white; color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        
-        .download-zone { display: none; margin-top: 20px; }
-        .btn-link { display: block; width: 100%; padding: 12px; margin-top: 10px; background: #222; color: white; text-decoration: none; border-radius: 10px; }
-        
-        .proxy-box { margin-top: 20px; padding: 15px; background: #1a1a1a; border-radius: 10px; text-align: left; }
-        .toast { position: fixed; bottom: 20px; padding: 10px 20px; background: #333; border-radius: 20px; display: none; }
+        body { background: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { border: 1px solid #333; padding: 20px; text-align: center; width: 300px; border-radius: 10px; }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: none; }
+        button { background: #fff; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="glass-container">
-        <div id="key-zone">
-            <h2>LOGIN KEY</h2>
-            <input type="text" id="user-key" placeholder="ENTER KEY...">
-            <button onclick="verifyKey()">ยืนยัน</button>
-        </div>
-
-        <div id="download-zone" class="download-zone">
-            <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn-link">📥 Potatso</a>
-            <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn-link">📜 ใบรับรอง</a>
-            
-            <div class="proxy-box">
-                <p>เซิร์ฟ: <span id="s">147.50.235.235</span></p>
-                <p>พอร์ต: <span id="p">9998</span></p>
-            </div>
-        </div>
+    <div class="box" id="login-box">
+        <h3>ใส่คีย์เพื่อเข้าใช้งาน</h3>
+        <input type="text" id="key" placeholder="proxy-roblox-1day-abcde">
+        <button onclick="checkKey()">ยืนยัน</button>
     </div>
 
-    <div id="toast" class="toast"></div>
+    <div class="box" id="content-box" style="display:none;">
+        <h3>✅ คีย์ถูกต้อง!</h3>
+        <a href="URL_ของคุณ" style="color:white;">กดดาวน์โหลดที่นี่</a>
+    </div>
 
     <script>
-        async function verifyKey() {
-            const key = document.getElementById('user-key').value.trim();
-            const toast = document.getElementById('toast');
+        // ฟังก์ชันตรวจสอบคีย์ (จำเป็นต้องมีเพื่อให้เว็บฉลาด)
+        async function checkKey() {
+            let key = document.getElementById('key').value.trim();
             
-            try {
-                // เปลี่ยนลิงก์ให้เป็นลิงก์ที่ไฟล์ keys.txt ของคุณอยู่จริงๆ
-                const res = await fetch("https://mooreaweqz-boop.github.io/key-proxy-roblox/keys.txt");
-                const data = await res.text();
-                
-                if (data.includes(key) && key !== "") {
-                    document.getElementById('key-zone').style.display = 'none';
-                    document.getElementById('download-zone').style.display = 'block';
-                } else {
-                    alert("คีย์ไม่ถูกต้อง");
-                }
-            } catch (e) {
-                alert("ไม่สามารถเชื่อมต่อระบบคีย์ได้");
+            // ตรวจสอบรูปแบบ (ต้องขึ้นต้นด้วย proxy-roblox-...)
+            if (!key.startsWith("proxy-roblox-")) {
+                alert("รูปแบบคีย์ไม่ถูกต้อง!");
+                return;
+            }
+
+            // ดึงไฟล์คีย์มาตรวจสอบ
+            let res = await fetch("https://raw.githubusercontent.com/mooreaweqz-boop/key-proxy-roblox/main/keys.txt");
+            let data = await res.text();
+
+            if (data.includes(key)) {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('content-box').style.display = 'block';
+            } else {
+                alert("คีย์ไม่ถูกต้อง หรือไม่มีในระบบ");
             }
         }
     </script>
