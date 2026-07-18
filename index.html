@@ -93,7 +93,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2), 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
-        /* ซ่อนกล่องข้อมูลยิงตัวโดนหัวไว้ในตอนแรก */
+        /* กล่องข้อมูลยิงตัวโดนหัว (ถูกซ่อนไว้ รอแสดงผลด้านล่างสุด) */
         .proxy-info-box {
             display: none;
             opacity: 0;
@@ -102,7 +102,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-top: 20px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -303,24 +303,7 @@
             <li>4. เปิดเกมเล่นได้เลย!!</li>
         </ul>
 
-        <div id="proxy-box" class="proxy-info-box">
-            <h2>🎯 ยิงตัวโดนหัว</h2>
-            <div class="proxy-item">
-                <span class="proxy-label">เซิร์ฟ:</span>
-                <div>
-                    <span class="proxy-value" id="server-val">147.50.235.235</span>
-                    <button class="btn-copy" onclick="copyText('server-val', 'เซิร์ฟเวอร์')">คัดลอก</button>
-                </div>
-            </div>
-            <div class="proxy-item">
-                <span class="proxy-label">พอร์ต:</span>
-                <div>
-                    <span class="proxy-value" id="port-val">9998</span>
-                    <button class="btn-copy" onclick="copyText('port-val', 'พอร์ต')">คัดลอก</button>
-                </div>
-            </div>
-        </div>
-
+        <!-- โซนที่ 1: กรอกคีย์เริ่มต้น -->
         <div id="key-zone" class="action-zone">
             <div class="input-wrapper">
                 <input type="text" id="user-key" placeholder="ENTER YOUR ACCESS KEY..." autocomplete="off">
@@ -328,10 +311,30 @@
             <button class="btn btn-primary" onclick="verifyKey()">ยืนยันคีย์</button>
         </div>
 
+        <!-- โซนที่ 2: ปุ่มลับที่จะขึ้นมาเมื่อคีย์ถูกต้อง -->
         <div id="download-zone" class="download-zone">
             <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn btn-primary">📥 ดาวน์โหลด Potatso</a>
             <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn btn-secondary">📜 ดาวน์โหลดใบรับรอง</a>
             <a href="https://youtu.be/XcXYzDPB1-k?si=ZWmi643iFjlAhogY" target="_blank" class="btn btn-secondary">🎥 คลิปสอนการใช้งาน</a>
+            
+            <!-- ย้ายกล่องข้อมูลยิงตัวโดนหัวมาต่อท้ายปุ่ม 3 ปุ่มตรงนี้แล้วครับ -->
+            <div id="proxy-box" class="proxy-info-box">
+                <h2>🎯 ยิงตัวโดนหัว</h2>
+                <div class="proxy-item">
+                    <span class="proxy-label">เซิร์ฟ:</span>
+                    <div>
+                        <span class="proxy-value" id="server-val">147.50.235.235</span>
+                        <button class="btn-copy" onclick="copyText('server-val', 'เซิร์ฟเวอร์')">คัดลอก</button>
+                    </div>
+                </div>
+                <div class="proxy-item">
+                    <span class="proxy-label">พอร์ต:</span>
+                    <div>
+                        <span class="proxy-value" id="port-val">9998</span>
+                        <button class="btn-copy" onclick="copyText('port-val', 'พอร์ต')">คัดลอก</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -374,26 +377,26 @@
                 const proxyBox = document.getElementById('proxy-box');
                 const downloadZone = document.getElementById('download-zone');
                 
-                // ซ่อนโซนกรอกคีย์ลง
+                // ซ่อนโซนกรอกคีย์
                 keyZone.style.opacity = "0";
                 keyZone.style.transform = "translateY(-10px)";
                 
                 setTimeout(() => {
                     keyZone.style.display = "none";
                     
-                    // แสดงผลกล่อง proxy และปุ่มดาวน์โหลดพร้อมกัน
-                    proxyBox.style.display = "block";
+                    // แสดงผลโซนดาวน์โหลดและกล่อง proxy
                     downloadZone.style.display = "flex";
+                    proxyBox.style.display = "block";
                     
-                    // Force reflow ให้แอนิเมชันทำงานสมูธ
-                    proxyBox.offsetHeight;
+                    // Force reflow
                     downloadZone.offsetHeight; 
+                    proxyBox.offsetHeight;
                     
-                    // ค่อยๆ แสดงแบบ Fade-in
-                    proxyBox.style.opacity = "1";
-                    proxyBox.style.transform = "translateY(0)";
+                    // ค่อยๆ แสดงผลแบบ Fade-in
                     downloadZone.style.opacity = "1";
                     downloadZone.style.transform = "translateY(0)";
+                    proxyBox.style.opacity = "1";
+                    proxyBox.style.transform = "translateY(0)";
                 }, 400); 
                 
             } else {
