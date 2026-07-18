@@ -2,73 +2,47 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>Proxy Login</title>
+    <title>Proxy Roblox Login</title>
     <style>
-        body { 
-            background: #000; 
-            color: #fff; 
-            font-family: sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-        }
-        .box { 
-            border: 1px solid #333; 
-            padding: 30px; 
-            text-align: center; 
-            width: 320px; 
-            border-radius: 15px; 
-            background: #111;
-        }
-        input { 
-            width: 100%; 
-            padding: 12px; 
-            margin: 10px 0; 
-            border-radius: 5px; 
-            border: 1px solid #444; 
-            background: #000; 
-            color: white; 
-            box-sizing: border-box;
-        }
-        button { 
-            width: 100%; 
-            padding: 12px; 
-            background: #fff; 
-            color: #000; 
-            border: none; 
-            border-radius: 5px; 
-            font-weight: bold; 
-            cursor: pointer; 
-        }
+        body { background: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { border: 1px solid #333; padding: 25px; text-align: center; width: 320px; border-radius: 12px; background: #1a1a1a; }
+        input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 6px; border: 1px solid #444; background: #000; color: #fff; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #fff; color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #ddd; }
+        #download-zone { display: none; }
+        h3 { margin-top: 0; }
     </style>
 </head>
 <body>
 
-    <div class="box" id="login-box">
-        <h3>LOGIN KEY</h3>
-        <input type="text" id="key" placeholder="proxy-roblox-1day-XXXXX">
-        <button onclick="checkKey()">ยืนยัน</button>
+    <!-- โซนใส่คีย์ -->
+    <div class="box" id="key-zone">
+        <h3>Login Key</h3>
+        <p style="font-size: 12px; color: #888;">โปรดใส่คีย์ให้ถูกต้อง</p>
+        <input type="text" id="user-key" placeholder="proxy-roblox-1day-xxxxx">
+        <button onclick="verifyKey()">ยืนยันคีย์</button>
     </div>
 
-    <div class="box" id="content-box" style="display:none;">
-        <h3>✅ เข้าสู่ระบบสำเร็จ</h3>
-        <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" style="color:cyan; display:block; margin-top:15px;">ดาวน์โหลดแอป</a>
+    <!-- โซนหลังใส่คีย์สำเร็จ -->
+    <div class="box" id="download-zone">
+        <h3>✅ สำเร็จ</h3>
+        <p>คีย์ถูกต้อง เข้าสู่หน้าดาวน์โหลดได้เลย</p>
+        <a href="URL_ดาวน์โหลด_ของคุณ" style="color: cyan; text-decoration: none; font-weight: bold;">[ ดาวน์โหลดที่นี่ ]</a>
     </div>
 
     <script>
-        function checkKey() {
-            let key = document.getElementById('key').value.trim();
+        function verifyKey() {
+            const inputKey = document.getElementById('user-key').value.trim();
             
-            // ตรวจสอบรูปแบบ: ต้องขึ้นต้นด้วย proxy-roblox-1day- และตามด้วยตัวอักษร 1 ตัวขึ้นไป
-            const regex = /^proxy-roblox-1day-[a-zA-Z]+$/;
+            // ระบบคีย์ใหม่: ต้องขึ้นต้นด้วย proxy-roblox-1day- และตามด้วยตัวอักษร/ตัวเลข 5 ตัวขึ้นไป
+            const regex = /^proxy-roblox-1day-[a-zA-Z0-9]+$/;
             
-            if (regex.test(key)) {
-                document.getElementById('login-box').style.display = 'none';
-                document.getElementById('content-box').style.display = 'block';
+            if (regex.test(inputKey)) {
+                // ถ้าผ่านเงื่อนไข ให้เปลี่ยนหน้า
+                document.getElementById('key-zone').style.display = 'none';
+                document.getElementById('download-zone').style.display = 'block';
             } else {
-                alert("❌ คีย์ไม่ถูกต้อง! รูปแบบต้องเป็น: proxy-roblox-1day-ตามด้วยตัวอักษร");
+                alert("❌ คีย์ไม่ถูกต้อง! รูปแบบต้องเป็น: proxy-roblox-1day-xxxxx");
             }
         }
     </script>
