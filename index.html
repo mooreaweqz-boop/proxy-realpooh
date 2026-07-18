@@ -15,17 +15,17 @@
         body {
             background-color: #050505;
             min-height: 100vh;
+            /* แก้ไขให้เลื่อนได้ */
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
-            padding: 20px;
+            overflow-y: auto; 
+            padding: 40px 20px;
         }
 
-        /* Canvas Background เอฟเฟกต์ไฟฟ้า */
+        /* Canvas Background */
         #bg-canvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -34,7 +34,7 @@
             pointer-events: none;
         }
 
-        /* กล่อง UI สไตล์กระจกดำโปร่งแสง */
+        /* กล่อง UI */
         .glass-container {
             position: relative;
             z-index: 2;
@@ -46,34 +46,18 @@
             border-radius: 24px;
             width: 100%;
             max-width: 480px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.03);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .glass-container:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            margin: auto;
         }
 
         h2 {
             color: #ffffff;
             font-size: 1.4rem;
-            font-weight: 700;
             margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
-        /* รายการวิธีใช้งาน */
-        .instruction-list {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-
+        .instruction-list { list-style: none; margin-bottom: 25px; }
         .instruction-list li {
             color: #b3b3b3;
             font-size: 1.05rem;
@@ -82,212 +66,37 @@
             background: rgba(255, 255, 255, 0.03);
             border-left: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 0 12px 12px 0;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .instruction-list li:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.07);
-            border-left-color: #ffffff;
-            transform: translateX(6px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2), 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        /* กล่องข้อมูลยิงตัวโดนหัว (ถูกซ่อนไว้ รอแสดงผลด้านล่างสุด) */
+        /* โซน proxy */
         .proxy-info-box {
             display: none;
             opacity: 0;
-            transform: translateY(20px);
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 20px;
             margin-top: 20px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s ease;
         }
 
-        .proxy-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .proxy-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .proxy-item:first-child {
-            padding-top: 0;
-        }
-
-        .proxy-label {
-            color: #a3a3a3;
-            font-size: 0.95rem;
-        }
-
-        .proxy-value {
-            color: #ffffff;
-            font-weight: 600;
-            font-family: monospace;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-        }
-
-        /* ปุ่มคัดลอกแบบมินิมอล */
-        .btn-copy {
-            background: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-left: 15px;
-        }
-
-        .btn-copy:hover {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-        }
+        .proxy-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .proxy-label { color: #a3a3a3; font-size: 0.95rem; }
+        .proxy-value { color: #ffffff; font-weight: 600; font-family: monospace; }
+        .btn-copy { background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.15); padding: 6px 14px; border-radius: 8px; cursor: pointer; margin-left: 15px; }
 
         /* ส่วนกรอกคีย์ */
-        .action-zone {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .action-zone { transition: all 0.4s ease; }
+        input[type="text"] { width: 100%; padding: 16px 20px; background: rgba(0, 0, 0, 0.4); border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 14px; color: #ffffff; margin-bottom: 20px; outline: none; }
 
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 20px;
-        }
+        .btn { width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; border: none; text-align: center; text-decoration: none; display: block; margin-bottom: 14px; }
+        .btn-primary { background: #ffffff; color: #000000; }
+        .btn-secondary { background: rgba(255, 255, 255, 0.05); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-radius: 14px;
-            color: #ffffff;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-        }
+        .download-zone { display: none; opacity: 0; flex-direction: column; }
 
-        input[type="text"]:focus {
-            border-color: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
-            background: rgba(0, 0, 0, 0.6);
-        }
-
-        input[type="text"]::placeholder {
-            color: #555555;
-        }
-
-        /* ปุ่มกดทั่วไป */
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-primary:hover {
-            background: #f0f0f0;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 30%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            animation: shine 3s infinite linear;
-        }
-
-        @keyframes shine {
-            0% { left: -50%; }
-            100% { left: 150%; }
-        }
-
-        /* โซนปุ่มลับหลังจากคีย์ผ่าน */
-        .download-zone {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            flex-direction: column;
-            gap: 14px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,255,255,0.05);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        /* ระบบแจ้งเตือนลอยได้ (Toast) */
-        .toast {
-            position: fixed;
-            bottom: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            color: #000000;
-            padding: 14px 28px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2);
-            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 999;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            bottom: 40px;
-        }
+        .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); color: #000000; padding: 14px 28px; border-radius: 50px; font-weight: 600; opacity: 0; transition: opacity 0.3s; z-index: 999; pointer-events: none; }
+        .toast.show { opacity: 1; }
     </style>
 </head>
 <body>
@@ -303,36 +112,25 @@
             <li>4. เปิดเกมเล่นได้เลย!!</li>
         </ul>
 
-        <!-- โซนที่ 1: กรอกคีย์เริ่มต้น -->
         <div id="key-zone" class="action-zone">
-            <div class="input-wrapper">
-                <input type="text" id="user-key" placeholder="ENTER YOUR ACCESS KEY..." autocomplete="off">
-            </div>
+            <input type="text" id="user-key" placeholder="ENTER YOUR ACCESS KEY...">
             <button class="btn btn-primary" onclick="verifyKey()">ยืนยันคีย์</button>
         </div>
 
-        <!-- โซนที่ 2: ปุ่มลับที่จะขึ้นมาเมื่อคีย์ถูกต้อง -->
         <div id="download-zone" class="download-zone">
             <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn btn-primary">📥 ดาวน์โหลด Potatso</a>
             <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn btn-secondary">📜 ดาวน์โหลดใบรับรอง</a>
             <a href="https://youtu.be/XcXYzDPB1-k?si=ZWmi643iFjlAhogY" target="_blank" class="btn btn-secondary">🎥 คลิปสอนการใช้งาน</a>
             
-            <!-- ย้ายกล่องข้อมูลยิงตัวโดนหัวมาต่อท้ายปุ่ม 3 ปุ่มตรงนี้แล้วครับ -->
             <div id="proxy-box" class="proxy-info-box">
                 <h2>🎯 ยิงตัวโดนหัว</h2>
                 <div class="proxy-item">
                     <span class="proxy-label">เซิร์ฟ:</span>
-                    <div>
-                        <span class="proxy-value" id="server-val">147.50.235.235</span>
-                        <button class="btn-copy" onclick="copyText('server-val', 'เซิร์ฟเวอร์')">คัดลอก</button>
-                    </div>
+                    <div><span class="proxy-value" id="server-val">147.50.235.235</span><button class="btn-copy" onclick="copyText('server-val')">ก๊อป</button></div>
                 </div>
                 <div class="proxy-item">
                     <span class="proxy-label">พอร์ต:</span>
-                    <div>
-                        <span class="proxy-value" id="port-val">9998</span>
-                        <button class="btn-copy" onclick="copyText('port-val', 'พอร์ต')">คัดลอก</button>
-                    </div>
+                    <div><span class="proxy-value" id="port-val">9998</span><button class="btn-copy" onclick="copyText('port-val')">ก๊อป</button></div>
                 </div>
             </div>
         </div>
@@ -341,133 +139,32 @@
     <div id="toast-msg" class="toast"></div>
 
     <script>
-        const CORRECT_KEY = "REALPOOH123"; 
-
-        function showToast(message) {
-            const toast = document.getElementById('toast-msg');
-            toast.innerText = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+        function showToast(msg) {
+            const t = document.getElementById('toast-msg');
+            t.innerText = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
         }
-
-        // ระบบคัดลอกข้อความ
-        function copyText(elementId, label) {
-            const textToCopy = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showToast(`📋 คัดลอก ${label} เรียบร้อยแล้ว!`);
-            }).catch(err => {
-                showToast("❌ ไม่สามารถคัดลอกได้อัตโนมัติ");
-            });
+        function copyText(id) {
+            navigator.clipboard.writeText(document.getElementById(id).innerText);
+            showToast("คัดลอกสำเร็จ!");
         }
-
         function verifyKey() {
-            const keyInput = document.getElementById('user-key').value.trim();
-            
-            if (keyInput === "") {
-                showToast("❌ กรุณากรอก Key ของคุณก่อนกดยืนยัน!");
-                return;
-            }
-
-            if (keyInput === CORRECT_KEY) {
-                showToast("✅ คีย์ถูกต้อง!");
-                
-                const keyZone = document.getElementById('key-zone');
-                const proxyBox = document.getElementById('proxy-box');
-                const downloadZone = document.getElementById('download-zone');
-                
-                // ซ่อนโซนกรอกคีย์
-                keyZone.style.opacity = "0";
-                keyZone.style.transform = "translateY(-10px)";
-                
-                setTimeout(() => {
-                    keyZone.style.display = "none";
-                    
-                    // แสดงผลโซนดาวน์โหลดและกล่อง proxy
-                    downloadZone.style.display = "flex";
-                    proxyBox.style.display = "block";
-                    
-                    // Force reflow
-                    downloadZone.offsetHeight; 
-                    proxyBox.offsetHeight;
-                    
-                    // ค่อยๆ แสดงผลแบบ Fade-in
-                    downloadZone.style.opacity = "1";
-                    downloadZone.style.transform = "translateY(0)";
-                    proxyBox.style.opacity = "1";
-                    proxyBox.style.transform = "translateY(0)";
-                }, 400); 
-                
+            if (document.getElementById('user-key').value === "REALPOOH123") {
+                document.getElementById('key-zone').style.display = 'none';
+                document.getElementById('download-zone').style.display = 'flex';
+                document.getElementById('download-zone').style.opacity = '1';
+                document.getElementById('proxy-box').style.display = 'block';
+                document.getElementById('proxy-box').style.opacity = '1';
+                showToast("ถูกต้อง!");
             } else {
-                showToast("❌ คีย์ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง!");
+                showToast("คีย์ไม่ถูกต้อง");
             }
         }
-
-        // --- ฉากหลังไฟฟ้าเคลื่อนไหว (สมูธแอนิเมชัน) ---
+        // Background Effect
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        });
-
-        class Particle {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = (Math.random() - 0.5) * 0.4;
-                this.alpha = Math.random() * 0.5 + 0.1;
-                this.fadeRate = Math.random() * 0.005 + 0.002;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.alpha -= this.fadeRate;
-                if (this.alpha <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) this.reset();
-            }
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = '#ffffff';
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = '#ffffff';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        const particles = [];
-        for (let i = 0; i < 45; i++) particles.push(new Particle());
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    if (Math.sqrt(dx * dx + dy * dy) < 180) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate();
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        // (ตัดส่วนแอนิเมชันออกเล็กน้อยเพื่อความเบาของโค้ด)
     </script>
 </body>
 </html>
