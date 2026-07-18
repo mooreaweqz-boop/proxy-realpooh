@@ -93,13 +93,17 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2), 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
-        /* กล่องข้อมูลยิงตัวโดนหัว */
+        /* ซ่อนกล่องข้อมูลยิงตัวโดนหัวไว้ในตอนแรก */
         .proxy-info-box {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .proxy-item {
@@ -219,7 +223,6 @@
             box-shadow: 0 12px 28px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
-        /* เอฟเฟกต์แสงวิ่งผ่านปุ่มพรีเมียม */
         .btn-primary::after {
             content: '';
             position: absolute;
@@ -300,13 +303,12 @@
             <li>4. เปิดเกมเล่นได้เลย!!</li>
         </ul>
 
-        <!-- โซนยิงตัวโดนหัว: อัปเดตไอพีเป็น 147.50.253.253 เรียบร้อยแล้วครับ -->
-        <div class="proxy-info-box">
+        <div id="proxy-box" class="proxy-info-box">
             <h2>🎯 ยิงตัวโดนหัว</h2>
             <div class="proxy-item">
                 <span class="proxy-label">เซิร์ฟ:</span>
                 <div>
-                    <span class="proxy-value" id="server-val">147.50.253.253</span>
+                    <span class="proxy-value" id="server-val">147.50.235.235</span>
                     <button class="btn-copy" onclick="copyText('server-val', 'เซิร์ฟเวอร์')">คัดลอก</button>
                 </div>
             </div>
@@ -319,7 +321,6 @@
             </div>
         </div>
 
-        <!-- โซนที่ 1: กรอกคีย์เริ่มต้น -->
         <div id="key-zone" class="action-zone">
             <div class="input-wrapper">
                 <input type="text" id="user-key" placeholder="ENTER YOUR ACCESS KEY..." autocomplete="off">
@@ -327,7 +328,6 @@
             <button class="btn btn-primary" onclick="verifyKey()">ยืนยันคีย์</button>
         </div>
 
-        <!-- โซนที่ 2: ปุ่มลับที่จะขึ้นมาเมื่อคีย์ถูกต้อง -->
         <div id="download-zone" class="download-zone">
             <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" target="_blank" class="btn btn-primary">📥 ดาวน์โหลด Potatso</a>
             <a href="http://147.50.253.235/downloads/parkin.pem" target="_blank" class="btn btn-secondary">📜 ดาวน์โหลดใบรับรอง</a>
@@ -371,17 +371,27 @@
                 showToast("✅ คีย์ถูกต้อง!");
                 
                 const keyZone = document.getElementById('key-zone');
+                const proxyBox = document.getElementById('proxy-box');
                 const downloadZone = document.getElementById('download-zone');
                 
+                // ซ่อนโซนกรอกคีย์ลง
                 keyZone.style.opacity = "0";
                 keyZone.style.transform = "translateY(-10px)";
                 
                 setTimeout(() => {
                     keyZone.style.display = "none";
+                    
+                    // แสดงผลกล่อง proxy และปุ่มดาวน์โหลดพร้อมกัน
+                    proxyBox.style.display = "block";
                     downloadZone.style.display = "flex";
                     
+                    // Force reflow ให้แอนิเมชันทำงานสมูธ
+                    proxyBox.offsetHeight;
                     downloadZone.offsetHeight; 
                     
+                    // ค่อยๆ แสดงแบบ Fade-in
+                    proxyBox.style.opacity = "1";
+                    proxyBox.style.transform = "translateY(0)";
                     downloadZone.style.opacity = "1";
                     downloadZone.style.transform = "translateY(0)";
                 }, 400); 
