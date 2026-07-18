@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยืนยันคีย์และวิธีใช้งาน</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Helvetica Neue', Arial;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* ส่วนวิธีใช้งาน */
+        .instruction-section {
+            margin-bottom: 30px;
+        }
+
+        .instruction-section h2 {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eef2f3;
+            padding-bottom: 8px;
+        }
+
+        .instruction-list {
+            list-style: none;
+        }
+
+        .instruction-list li {
+            font-size: 1.05rem;
+            color: #4a5568;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            line-height: 1.5;
+        }
+
+        /* ส่วนกรอกคีย์ */
+        .key-section {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .key-section label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3b82f6;
+        }
+
+        button {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- วิธีใช้งานอยู่ด้านบนตามบรีฟ -->
+        <div class="instruction-section">
+            <h2>วิธีใช้งาน</h2>
+            <ul class="instruction-list">
+                <li>1. กรอก Key ของคุณ</li>
+                <li>2. ดาวน์โหลด potatso บนไอโฟนของคุณ</li>
+                <li>3. ตั้งค่า proxy บนแอป</li>
+                <li>4. เปิดเกมเล่นได้เลย!!</li>
+            </ul>
+        </div>
+
+        <!-- ส่วนกรอกคีย์ด้านล่าง -->
+        <div class="key-section">
+            <div class="input-group">
+                <label for="user-key">กรอกคีย์ของคุณที่นี่</label>
+                <input type="text" id="user-key" placeholder="ใส่ Key ของคุณเพื่อเปิดใช้งาน..." autocomplete="off">
+                <button id="submit-btn" onclick="verifyKey()">ยืนยันคีย์</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function verifyKey() {
+            const keyInput = document.getElementById('user-key').value.trim();
+            
+            if (keyInput === "") {
+                alert("กรุณากรอก Key ของคุณก่อนกดยืนยันครับ!");
+                return;
+            }
+
+            // ตัวอย่าง: ถ้าต้องการระบบเช็คคีย์เบื้องต้น (สามารถนำไปปรับแต่งเพิ่มได้)
+            alert("กำลังตรวจสอบคีย์: " + keyInput);
+        }
+    </script>
+
+</body>
+</html>
