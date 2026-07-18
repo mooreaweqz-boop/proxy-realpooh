@@ -1,48 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>Key Login</title>
+    <title>Proxy Login</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { border: 1px solid #333; padding: 20px; text-align: center; width: 300px; border-radius: 10px; }
-        input, button { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: none; }
-        button { background: #fff; cursor: pointer; font-weight: bold; }
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .box { 
+            border: 1px solid #333; 
+            padding: 30px; 
+            text-align: center; 
+            width: 320px; 
+            border-radius: 15px; 
+            background: #111;
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            border: 1px solid #444; 
+            background: #000; 
+            color: white; 
+            box-sizing: border-box;
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background: #fff; 
+            color: #000; 
+            border: none; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
     </style>
 </head>
 <body>
 
     <div class="box" id="login-box">
-        <h3>ใส่คีย์เพื่อเข้าใช้งาน</h3>
-        <input type="text" id="key" placeholder="proxy-roblox-1day-abcde">
+        <h3>LOGIN KEY</h3>
+        <input type="text" id="key" placeholder="proxy-roblox-1day-XXXXX">
         <button onclick="checkKey()">ยืนยัน</button>
     </div>
 
     <div class="box" id="content-box" style="display:none;">
-        <h3>✅ คีย์ถูกต้อง!</h3>
-        <a href="URL_ของคุณ" style="color:white;">กดดาวน์โหลดที่นี่</a>
+        <h3>✅ เข้าสู่ระบบสำเร็จ</h3>
+        <a href="https://apps.apple.com/th/app/potatso/id1239860606?l=th" style="color:cyan; display:block; margin-top:15px;">ดาวน์โหลดแอป</a>
     </div>
 
     <script>
-        // ฟังก์ชันตรวจสอบคีย์ (จำเป็นต้องมีเพื่อให้เว็บฉลาด)
-        async function checkKey() {
+        function checkKey() {
             let key = document.getElementById('key').value.trim();
             
-            // ตรวจสอบรูปแบบ (ต้องขึ้นต้นด้วย proxy-roblox-...)
-            if (!key.startsWith("proxy-roblox-")) {
-                alert("รูปแบบคีย์ไม่ถูกต้อง!");
-                return;
-            }
-
-            // ดึงไฟล์คีย์มาตรวจสอบ
-            let res = await fetch("https://raw.githubusercontent.com/mooreaweqz-boop/key-proxy-roblox/main/keys.txt");
-            let data = await res.text();
-
-            if (data.includes(key)) {
+            // ตรวจสอบรูปแบบ: ต้องขึ้นต้นด้วย proxy-roblox-1day- และตามด้วยตัวอักษร 1 ตัวขึ้นไป
+            const regex = /^proxy-roblox-1day-[a-zA-Z]+$/;
+            
+            if (regex.test(key)) {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('content-box').style.display = 'block';
             } else {
-                alert("คีย์ไม่ถูกต้อง หรือไม่มีในระบบ");
+                alert("❌ คีย์ไม่ถูกต้อง! รูปแบบต้องเป็น: proxy-roblox-1day-ตามด้วยตัวอักษร");
             }
         }
     </script>
